@@ -1,0 +1,26 @@
+/*!
+ * Project_Name: Paytm Weather
+ * Author: Sangchual Cha
+ * Email: sangchual.cha[at]gmail.com
+ */
+/*=========================================== 
+ * custom css
+ *===========================================*/
+
+ .dlg_lbl {
+  display: inline-block;
+  text-align: right;
+  width: 80px;
+  white-space: nowrap;
+}
+
+.dlg_fld {
+  border-radius: 0px;
+  padding: 2px;
+  margin: 2px;
+  width: 250px;
+}
+
+.dlg_frm {
+  display: inline-block;
+}
