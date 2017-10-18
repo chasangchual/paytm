@@ -1,5 +1,8 @@
 package com.sangchual.paytm.softwarechallenges.user;
 
+import com.sangchual.paytm.softwarechallenges.activities.UserActivity;
+import com.sangchual.paytm.softwarechallenges.activities.UserActivityService;
+import com.sangchual.paytm.softwarechallenges.activities.UserActivityType;
 import com.sangchual.paytm.softwarechallenges.exception.InvalidDataFormatException;
 import com.sangchual.paytm.softwarechallenges.exception.ResourceConflictException;
 import com.sangchual.paytm.softwarechallenges.exception.ResourceNotFoundException;
@@ -21,6 +24,8 @@ public class UserController {
     @Autowired
     EmailValdator emailValdator ;
 
+    @Autowired
+    private UserActivityService userActivityDAO ;
     /**
      *
      * @param user
@@ -52,6 +57,9 @@ public class UserController {
         result.setCode(Result.SUCCESS);
         result.setMessage("sign up success");
 
+        // TO-DO
+        // capture user request trough servlet filter
+        userActivityDAO.save(new UserActivity().withEmail(user.getEmail()).withActivity(UserActivityType.SIGN_UP.getValue())) ;
         return result ;
     }
 
@@ -78,6 +86,8 @@ public class UserController {
         } else {
             throw new ResourceNotFoundException("failed to sign in with specified user credential.") ;
         }
+
+        userActivityDAO.save(new UserActivity().withEmail(user.getEmail()).withActivity(UserActivityType.SIGN_IN.getValue())) ;
 
         return result ;
     }
@@ -106,6 +116,8 @@ public class UserController {
 
         result.setCode(Result.SUCCESS);
         result.setMessage("password change success.");
+
+        userActivityDAO.save(new UserActivity().withEmail(user.getEmail()).withActivity(UserActivityType.UPDATE_PASSWORD.getValue())) ;
 
         return result ;
     }

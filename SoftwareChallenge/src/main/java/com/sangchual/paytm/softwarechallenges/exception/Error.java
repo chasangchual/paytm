@@ -6,13 +6,10 @@ import lombok.NonNull;
 import lombok.Setter;
 
 @NoArgsConstructor
+@Getter
+@Setter
 public class Error {
-    @Getter
-    @Setter
     Integer code ;
-
-    @Getter
-    @Setter
     String message ;
 
     public Error(@NonNull Integer code, @NonNull String message) {

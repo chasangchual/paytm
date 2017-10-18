@@ -1,14 +1,22 @@
 package com.sangchual.paytm.softwarechallenges.openweathermap;
 
+import com.sangchual.paytm.softwarechallenges.activities.UserActivity;
+import com.sangchual.paytm.softwarechallenges.activities.UserActivityService;
+import com.sangchual.paytm.softwarechallenges.activities.UserActivityType;
+import com.sangchual.paytm.softwarechallenges.exception.AuthTokenValidationFailed;
 import com.sangchual.paytm.softwarechallenges.exception.InvalidUserRequestException;
 import com.sangchual.paytm.softwarechallenges.openweathermap.api.OpenWeatherMapAPI;
 import com.sangchual.paytm.softwarechallenges.openweathermap.entity.OpenWeatherMapResponse;
 import com.sangchual.paytm.softwarechallenges.openweathermap.entity.current.CurrentWeather;
 import com.sangchual.paytm.softwarechallenges.utils.AuthTokenManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class WeatherController {
+    @Autowired
+    private UserActivityService userActivityDAO ;
+
     /**
      * http://localhost:8080/service/v1/weather?city=Toronto
      * @param city
@@ -29,11 +37,13 @@ public class WeatherController {
             responseOpenWeatherMap.setWeatherForecast(weatherMapAPI.getForecast(city));
             responseOpenWeatherMap.setDailyForecast(weatherMapAPI.getDailyForecast(city));
 
-            // TO-DO handling exception
+            // TO-DO
+            // capture user request trough servlet filter
+            userActivityDAO.save(new UserActivity().withEmail(email).withActivity(UserActivityType.SEARCH.getValue())) ;
 
             return responseOpenWeatherMap ;
         } else {
-            throw new InvalidUserRequestException("invalid auth token passed.") ;
+            throw new AuthTokenValidationFailed("invalid auth token passed.") ;
         }
     }
 }

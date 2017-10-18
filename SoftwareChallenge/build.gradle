@@ -37,6 +37,7 @@ dependencies {
     // tag::actuator[]
     compile("org.springframework.boot:spring-boot-starter-actuator")
     // end::actuator[]
+    compile("org.springframework.boot:spring-boot-starter-data-elasticsearch")
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
     compile("org.projectlombok:lombok:1.16.18")
     // https://github.com/google/gson

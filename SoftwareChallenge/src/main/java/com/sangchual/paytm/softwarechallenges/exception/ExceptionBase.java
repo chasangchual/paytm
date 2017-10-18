@@ -7,7 +7,6 @@ import lombok.Setter;
 
 public class ExceptionBase extends RuntimeException {
     @Getter
-    @Setter
     final Error error ;
 
     public ExceptionBase(@NonNull Integer code, @NonNull String message) {

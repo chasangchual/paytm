@@ -8,21 +8,17 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
 public class User {
     @Id
     @Column(name="email")
-    @Getter
-    @Setter
     private String email ;
 
     @Column(name="username")
-    @Getter
-    @Setter
     private String username ;
 
     @Column(name="password")
-    @Getter
-    @Setter
     private String password ;
 
     protected User() {
