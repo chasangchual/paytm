@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sangchual.paytm.softwarechallenges.utils.AuthTokenManagerTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2017-10-18T07:16:40" hostname="DESKTOP-5AQEMSI" time="0.138">
+  <properties/>
+  <testcase name="encrypt" classname="com.sangchual.paytm.softwarechallenges.utils.AuthTokenManagerTest" time="0.102"/>
+  <testcase name="validateAuthToken" classname="com.sangchual.paytm.softwarechallenges.utils.AuthTokenManagerTest" time="0.034"/>
+  <testcase name="createAuthToken" classname="com.sangchual.paytm.softwarechallenges.utils.AuthTokenManagerTest" time="0.001"/>
+  <testcase name="decrypt" classname="com.sangchual.paytm.softwarechallenges.utils.AuthTokenManagerTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
