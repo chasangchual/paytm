@@ -1,5 +1,6 @@
 package com.sangchual.paytm.softwarechallenges.utils;
 
+import com.sangchual.paytm.softwarechallenges.exception.AuthTokenValidationFailed;
 import com.sangchual.paytm.softwarechallenges.exception.InternalServerException;
 import com.sangchual.paytm.softwarechallenges.exception.InvalidDataFormatException;
 import com.sangchual.paytm.softwarechallenges.user.entity.User;
@@ -29,13 +30,17 @@ public class AuthTokenManager {
     }
 
     public String createAuthToken(User user)  {
-        StringBuilder inStr = new StringBuilder(user.getEmail()) ;
+        return createAuthToken(user.getEmail()) ;
+    }
+
+    public String createAuthToken(String email)  {
+        StringBuilder inStr = new StringBuilder(email) ;
         inStr.append("|") ; inStr.append(expiryDateTimeString()) ;
 
         String encrypted = "" ;
 
         try {
-            encrypted = Base64.getEncoder().encodeToString(encrypt(inStr.toString(), KEY).getBytes()) ;
+            encrypted = encrypt(inStr.toString(), KEY) ;
         } catch (Exception e) {
             throw new InternalServerException("Exception occurred during auth token encryption") ;
         }
@@ -47,25 +52,25 @@ public class AuthTokenManager {
         String decrypted = null;
 
         try {
-            decrypted = decrypt(Base64.getDecoder().decode(authToken), KEY);
+            decrypted = decrypt(authToken, KEY);
         } catch (Exception e) {
             throw new InternalServerException("Exception occurred during base64 decoding") ;
         }
 
-        String[] values = decrypted.split("|") ;
+        String[] values = decrypted.split("\\|") ;
         if(values.length != 2) {
-            throw new InvalidDataFormatException("invalid auth token passed - format error") ;
+            throw new AuthTokenValidationFailed("invalid auth token passed - format error") ;
         }
 
         if(!email.equals(values[0])) {
-            throw new InvalidDataFormatException("invalid auth token passed - email does not match") ;
+            throw new AuthTokenValidationFailed("invalid auth token passed - email does not match") ;
         }
 
         DateTimeFormatter  formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT) ;
         LocalDateTime dateTime = LocalDateTime.parse(values[1], formatter);
 
         if(LocalDateTime.now().isAfter(dateTime)) {
-            throw new InvalidDataFormatException("invalid auth token passed - expired token") ;
+            throw new AuthTokenValidationFailed("invalid auth token passed - expired token") ;
         }
 
         return Boolean.TRUE ;
@@ -77,7 +82,7 @@ public class AuthTokenManager {
         return now.format(formatter) ;
     }
 
-    private String encrypt(String strClearText,String strKey) throws Exception{
+    public String encrypt(String strClearText,String strKey) throws Exception{
         String strData="";
 
         try {
@@ -85,7 +90,7 @@ public class AuthTokenManager {
             Cipher cipher= Cipher.getInstance("Blowfish");
             cipher.init(Cipher.ENCRYPT_MODE, skeyspec);
             byte[] encrypted=cipher.doFinal(strClearText.getBytes());
-            strData=new String(encrypted);
+            strData=Base64.getEncoder().encodeToString((encrypted));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,14 +99,14 @@ public class AuthTokenManager {
         return strData;
     }
 
-    private String decrypt(byte[] strEncrypted,String strKey) throws Exception{
-        String strData="";
-
+    public String decrypt(String strEncrypted,String strKey) throws Exception{
+        byte[] encryptedData = Base64.getDecoder().decode(strEncrypted);
+        String strData = "" ;
         try {
             SecretKeySpec skeyspec=new SecretKeySpec(strKey.getBytes(),"Blowfish");
             Cipher cipher=Cipher.getInstance("Blowfish");
             cipher.init(Cipher.DECRYPT_MODE, skeyspec);
-            byte[] decrypted=cipher.doFinal(strEncrypted);
+            byte[] decrypted=cipher.doFinal(encryptedData);
             strData=new String(decrypted);
 
         } catch (Exception e) {
@@ -109,5 +114,9 @@ public class AuthTokenManager {
             throw new Exception(e);
         }
         return strData;
+    }
+
+    public String getKey() {
+        return KEY ;
     }
 }

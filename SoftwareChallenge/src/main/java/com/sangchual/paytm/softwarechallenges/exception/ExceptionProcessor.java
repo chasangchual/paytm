@@ -27,6 +27,17 @@ public class ExceptionProcessor {
         return ex.getError();
     }
 
+    /********************************************************
+     * HTTP Status Code  - Unauthorized (401)
+     *******************************************************/
+    @ExceptionHandler(AuthTokenValidationFailed.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    Error handleNotFound(AuthTokenValidationFailed ex)
+    {
+        return ex.getError();
+    }
+
 
     /********************************************************
      * HTTP Status Code  - Not Found (404)
