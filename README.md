@@ -136,7 +136,9 @@ Github https://github.com/chasangchual/paytm
 
     cluster.name: paytm-cluster
 
-    ​
+- Gradle in PATH
+
+  ​
 
 ##### Steps
 
@@ -168,5 +170,5 @@ Github https://github.com/chasangchual/paytm
 
 - ##### Orchestrate oepn weather map API with Restrifit2
 
-
+![Screen Capture](https://github.com/chasangchual/paytm/blob/master/Capture.PNG)
 
